@@ -1,0 +1,31 @@
+<html lang="en" style="height: 100%">
+    <body style="margin:0; padding:0; height: 100%; display: grid">
+        <div style="position: relative; width: 500px; height: 80dvh; margin: auto; box-shadow: 0 0 15px #1461db; border-radius: 15px; overflow: hidden">
+            <iframe
+                id="transakIframe"
+                src="https://global-stg.transak.com/?apiKey=9b4e0655-329a-4799-8b0d-fa7484e9efd8&environment=STAGING"
+                allow="camera;microphone;payment"
+                style="height: 100%; width: 100%; border: none">
+            </iframe>
+        </div>
+
+        <script>
+            (function () {
+                const transakIframe = document.getElementById("transakIframe")?.contentWindow;
+
+                window.addEventListener('message', (message) => {
+                    if (message.source !== transakIframe) return;
+
+                    // To get all the events
+                    console.log('Event ID: ', message?.data?.event_id);
+                    console.log('Data: ', message?.data?.data);
+
+                    // This will trigger when the user marks payment is made
+                    if (message?.data?.event_id === 'TRANSAK_ORDER_SUCCESSFUL') {
+                        console.log('Order Data: ', message?.data?.data);
+                    }
+                });
+            })();
+        </script>
+    </body>
+</html>
